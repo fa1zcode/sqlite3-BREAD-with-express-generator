@@ -5,10 +5,36 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(path.join(__dirname, '..', 'db', 'todo.db'));
 
 router.get('/', function (req, res) {
-  db.all('select * from todo', (err, raws) => {
-    if (err) return res.send(err)
-    //console.log(raws)
-    res.render('list', { data: raws })
+
+  const params = []
+  
+
+  if (req.query.task) {
+    params.push(`task like '${req.query.task}'`)
+  }
+
+  const page = req.query.page || 1 // if no req.query.page, page = 1
+  const limit = 3
+  const offset = (page - 1) * limit
+
+  let sql = 'select count(*) as total from todo'
+  if(params.length >0){
+    sql += ` where ${params.join(' and ')}`
+  }
+
+  db.get(sql, (err, raws) => {
+    const jumlahHalaman = Math.ceil(raws.total / limit)
+    sql = 'select * from todo'
+    if(params.length >0){
+      sql += ` where ${params.join(' and ')}`
+    }
+    sql += ` limit ? offset ?`
+    console.log(sql)
+    db.all(sql, [limit, offset], (err, raws) => {
+      if (err) return res.send(err)
+      //console.log(raws)
+      res.render('list', { data: raws, page, jumlahHalaman })
+    })
   })
 })
 

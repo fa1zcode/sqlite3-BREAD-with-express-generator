@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
+
 <body>
     <h1>To Do</h1>
+    <div class="card">
+        <form action="" method="get">
+            <div class="card-header">
+                <h2>Pencarian</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <label for="task" class="col-sm-2">Task</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="task" name="task"  />
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Cari</button>
+                <a href="/" class="btn btn-warning">Reset</a>
+            </div>
+        </form>
+    </div>
     <table border="1">
         <thead>
             <tr>
@@ -18,19 +41,45 @@
             </tr>
         </thead>
         <tbody>
-            <% data.forEach((item, index) => { %>
-            <tr>
-                <td><%= index + 1 %></td>
-                <td><%= item.task %></td>
-                <td><%= item.complete ? 'Yes' : 'No' %></td>
-                <td>
-                    <a href="/edit/<%= item.id%>">Edit</a>
-                    <a href="/delete/<%= item.id%>">Delete</a>
-                </td>
-            </tr>
-            <% }) %>
+            <% data.forEach((item, index)=> { %>
+                <tr>
+                    <td>
+                        <%= index + 1 %>
+                    </td>
+                    <td>
+                        <%= item.task %>
+                    </td>
+                    <td>
+                        <%= item.complete ? 'Yes' : 'No' %>
+                    </td>
+                    <td>
+                        <a href="/edit/<%= item.id%>">Edit</a>
+                        <a href="/delete/<%= item.id%>">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <% for (let i=1; i<=jumlahHalaman; i++ ){ %>
+                <li class="page-item <%= i == page ? 'active' : '' %> "><a class="page-link" href="/?page=<%= i %>">
+                        <%= i %>
+                    </a></li>
+                <% } %>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+        </ul>
+    </nav>
     <a href="/add">Tambah</a>
 </body>
+
 </html>

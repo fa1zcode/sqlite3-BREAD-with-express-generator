@@ -13,8 +13,8 @@
         <input type="text" id="task" name="task" value="<%= data.task %>">
         <label for="complete">Selesai</label>
         <select name="complete" id="">
-            <option value="false">false</option>
-            <option value="true" <%= data.complete ? 'selected' : '' %>>true</option>
+            <option value="false">No</option>
+            <option value="true" <%= data.complete ? 'selected' : '' %>>Yes</option>
         </select>
         <button type="submit">Simpan</button>
     </form>
