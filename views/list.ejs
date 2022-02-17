@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>To Do</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Daftar Pekerjaan</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach((item, index) => { %>
+            <tr>
+                <td><%= index + 1 %></td>
+                <td><%= item.task %></td>
+                <td><%= item.complete ? 'Yes' : 'No' %></td>
+                <td>
+                    <a href="/edit/<%= item.id%>">Edit</a>
+                    <a href="/delete/<%= item.id%>">Delete</a>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <a href="/add">Tambah</a>
+</body>
+</html>
