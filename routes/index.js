@@ -4,6 +4,28 @@ var path = require("path");
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(path.join(__dirname, "..", "db", "todo.db"));
 
+router.get("/login", function (req, res) {
+  res.render("login");
+});
+
+router.post("/login", function (req, res) {
+  const email = req.body.email;
+  const password = req.body.password;
+  
+  console.log(email)
+  console.log(password)
+
+  db.get(
+    "select * from user where email = ? and password = ?",
+    [email, password],
+    (err, raw) => {
+      if (err) return res.send("Login Gagal");
+      if (!raw) return res.send("Masukkan Username")
+      res.redirect("/")
+    }
+  );
+});
+
 router.get("/", function (req, res) {
   const url = req.url == "/" ? "/?page=1" : req.url;
   console.log(url);
@@ -11,7 +33,7 @@ router.get("/", function (req, res) {
   const params = [];
 
   if (req.query.task) {
-    params.push(`task like '%${req.query.task}%' `);
+    params.push(`task like '${req.query.task}' `);
   }
 
   if (req.query.complete) {
@@ -43,7 +65,7 @@ router.get("/", function (req, res) {
         page,
         jumlahHalaman,
         query: req.query,
-        url
+        url,
       });
     });
   });

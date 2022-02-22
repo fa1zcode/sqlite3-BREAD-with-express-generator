@@ -47,7 +47,7 @@
       <tbody>
         <% data.forEach((item, index)=> { %>
         <tr>
-          <td><%= index + 1 %></td>
+          <td><%= item.id %></td>
           <td><%= item.task %></td>
           <td><%= item.complete ? 'Yes' : 'No' %></td>
           <td>
@@ -60,8 +60,8 @@
     </table>
     <nav aria-label="Page navigation example">
       <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+        <li class="page-item <%= page == 1 ? 'disabled' : '' %>">
+          <a class="page-link" href=" <%= url.replace(`page=${page}` , `page=${Number(page) - 1}`) %> " aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -75,8 +75,8 @@
           </a>
         </li>
         <% } %>
-        <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
+        <li class="page-item <%= page == jumlahHalaman ? 'disabled' : '' %>">
+          <a class="page-link" href=" <%= url.replace(`page=${page}` , `page=${Number(page) + 1}`) %> " aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
