@@ -80,7 +80,7 @@
   </head>
   <body class="text-center">
     <main class="form-signin">
-      <form action="/login" method="post">
+      <form action="/register" method="post">
         <img
           class="mb-4"
           src="/stylesheets/bootstrap-logo.svg"
@@ -88,7 +88,7 @@
           width="72"
           height="57"
         />
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 fw-normal">Create New Account</h1>
 
         <div class="form-floating">
           <input
@@ -100,6 +100,17 @@
           />
           <label for="floatingInput">Email address</label>
         </div>
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Your Fullname"
+            name="fullname"
+          />
+          <label for="floatingInput">Full name</label>
+        </div>
+
         <div class="form-floating">
           <input
             type="password"
@@ -117,9 +128,11 @@
           </label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">
-          Sign in
+          Sign Up
         </button>
-        <p class="mt-5 mb-3 text-muted">Doesn't have account? <a href="/register">register</a></p>
+        <p class="mt-5 mb-3 text-muted">
+          Already have an account? <a href="/login">Sign In</a>
+        </p>
       </form>
     </main>
   </body>
