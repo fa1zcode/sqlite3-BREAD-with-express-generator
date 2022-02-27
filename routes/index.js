@@ -112,7 +112,7 @@ router.get("/add", isLoggedIn, function (req, res) {
   res.render("add");
 });
 
-router.post("/add", function (req, res) {
+router.post("/add", isLoggedIn, function (req, res) {
   task = req.body.task;
   // query binding = use (?) to prevent hack via sql injection
   db.run(
