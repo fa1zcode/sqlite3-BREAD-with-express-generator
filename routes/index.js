@@ -16,7 +16,7 @@ function isLoggedIn(req, res, next) {
 }
 
 router.get("/login", function (req, res) {
-  res.render("login");
+  res.render("login", { loginMessage: req.flash("loginMessage") });
 });
 
 router.post("/login", function (req, res) {
@@ -24,8 +24,15 @@ router.post("/login", function (req, res) {
   const password = req.body.password;
 
   db.get("select * from user where email = ?", [email], (err, user) => {
-    if (err) return res.send("Login Gagal");
-    if (!user) return res.send("User tidak ditemukan");
+    if (err) {
+      req.flash("loginMessage", "Login Gagal");
+      return res.redirect("/login");
+    }
+    if (!user) {
+      req.flash("loginMessage", "User Tidak Ditemukan");
+      return res.redirect("/login");
+    }
+
     bcrypt.compare(password, user.password, function (err, result) {
       // result == true
       if (result) {
@@ -33,7 +40,8 @@ router.post("/login", function (req, res) {
         console.log(req.session.user);
         res.redirect("/");
       } else {
-        res.send("password salah");
+        req.flash("loginMessage", "Password Salah");
+        res.redirect("/login");
       }
     });
   });
