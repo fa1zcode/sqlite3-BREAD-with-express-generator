@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require("path");
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(path.join(__dirname, "..", "db", "todo.db"));
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 function isLoggedIn(req, res, next) {
   if (req.session.user) {
@@ -21,18 +23,20 @@ router.post("/login", function (req, res) {
   const email = req.body.email;
   const password = req.body.password;
 
-  db.get(
-    "select * from user where email = ? and password = ?",
-    [email, password],
-    (err, user) => {
-      if (err) return res.send("Login Gagal");
-      if (!user) return res.send("Email / Password yang anda masukkan salah");
-      //console.log(user);
-      req.session.user = user;
-      console.log(req.session.user);
-      res.redirect("/");
-    }
-  );
+  db.get("select * from user where email = ?", [email], (err, user) => {
+    if (err) return res.send("Login Gagal");
+    if (!user) return res.send("User tidak ditemukan");
+    bcrypt.compare(password, user.password, function (err, result) {
+      // result == true
+      if (result) {
+        req.session.user = user;
+        console.log(req.session.user);
+        res.redirect("/");
+      } else {
+        res.send("password salah");
+      }
+    });
+  });
 });
 
 router.get("/register", function (req, res) {
@@ -44,14 +48,17 @@ router.post("/register", function (req, res) {
   const password = req.body.password;
   const fullname = req.body.fullname;
 
-  db.run(
-    "insert into user (email, password, fullname) values (?,?,?)",
-    [email, password, fullname],
-    (err, user) => {
-      if (err) return res.send("Register Failed");
-      res.redirect("/login");
-    }
-  );
+  bcrypt.hash(password, saltRounds, function (err, hash) {
+    // Store hash in your password DB.
+    db.run(
+      "insert into user (email, password, fullname) values (?,?,?)",
+      [email, hash, fullname],
+      (err, user) => {
+        if (err) return res.send("Register Failed");
+        res.redirect("/login");
+      }
+    );
+  });
 });
 
 router.get("/logout", function (req, res) {
