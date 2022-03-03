@@ -72,7 +72,7 @@ router.post("/register", function (req, res) {
 router.get("/logout", function (req, res) {
   req.session.destroy(function (err) {
     // cannot access session here
-    res.render("login");
+    res.redirect("/login");
   });
 });
 
@@ -145,6 +145,7 @@ router.get("/delete/:id", isLoggedIn, function (req, res) {
   const id = Number(req.params.id);
   db.run("delete from todo where id = ? ", [id], (err, raws) => {
     if (err) return res.send(err);
+    req.flash("loginMessage", "Task berhasil dihapus");
     console.log(raws);
     res.redirect("/");
   });
